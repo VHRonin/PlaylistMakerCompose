@@ -1,12 +1,15 @@
 package com.example.playlistmakercompose
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -49,6 +53,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(){
+    val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize()
         .background(colorResource(R.color.blue))
@@ -77,16 +82,22 @@ fun MainScreen(){
             NavigationButton(
                 text = stringResource(R.string.settings),
                 iconRes = R.drawable.ic_settings,
-                modifier = Modifier.weight(1f))
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    val settingsIntent = Intent(context, SettingsActivity::class.java)
+                    context.startActivity(settingsIntent)
+                })
         }
     }
 }
 
 
+
+
 @Composable
-fun NavigationButton(text: String, iconRes: Int, modifier: Modifier = Modifier){
+fun NavigationButton(text: String, iconRes: Int, modifier: Modifier = Modifier, onClick: () -> Unit = {}){
     Button(
-        onClick = {},
+        onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
             containerColor = colorResource(R.color.white),
@@ -107,8 +118,9 @@ fun NavigationButton(text: String, iconRes: Int, modifier: Modifier = Modifier){
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     MainScreen()
 }
+
