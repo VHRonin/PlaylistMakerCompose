@@ -123,4 +123,3 @@ fun NavigationButton(text: String, iconRes: Int, modifier: Modifier = Modifier, 
 fun GreetingPreview() {
     MainScreen()
 }
-
