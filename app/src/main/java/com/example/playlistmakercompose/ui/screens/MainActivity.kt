@@ -67,12 +67,18 @@ fun MainScreen(){
             NavigationButton(
                 text = stringResource(R.string.search),
                 iconRes = R.drawable.ic_search,
-                modifier = Modifier.weight(1f))
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    val searchIntent = Intent(context, SearchActivity::class.java)
+                    context.startActivity(searchIntent)
+                }
+            )
 
             NavigationButton(
                 text = stringResource(R.string.media_library),
                 iconRes = R.drawable.ic_library,
-                modifier = Modifier.weight(1f))
+                modifier = Modifier.weight(1f)
+            )
 
             NavigationButton(
                 text = stringResource(R.string.settings),
