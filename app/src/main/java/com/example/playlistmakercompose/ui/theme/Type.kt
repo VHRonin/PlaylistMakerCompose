@@ -23,6 +23,13 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.sp
     ),
+    bodySmall = TextStyle(
+        fontFamily = YSDisplayFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 11.sp,
+        lineHeight = 11.sp,
+        letterSpacing = 0.sp
+    ),
     titleLarge = TextStyle(
         fontFamily = YSDisplayFamily,
         fontWeight = FontWeight.W500,
