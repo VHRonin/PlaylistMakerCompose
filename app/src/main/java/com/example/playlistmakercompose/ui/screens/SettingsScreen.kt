@@ -2,11 +2,6 @@ package com.example.playlistmakercompose.ui.screens
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,81 +9,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.example.playlistmakercompose.R
-import com.example.playlistmakercompose.ui.components.MyTopBar
-import com.example.playlistmakercompose.ui.theme.PlaylistMakerComposeTheme
-
-class SettingsActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            PlaylistMakerComposeTheme {
-                Scaffold(topBar = {
-                    MyTopBar(
-                        headText = stringResource(R.string.settings),
-                        onClick = {finish()}
-                    )
-                },
-                    modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(modifier = Modifier.padding(innerPadding)) {
-                        SettingsScreen()
-                    }
-                }
-            }
-        }
-    }
-}
-
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun SettingsTopBar(){
-//    TopAppBar(
-//        title = {
-//            Text(
-//                text = stringResource(R.string.settings),
-//                style = MaterialTheme.typography.titleLarge)
-//        },
-//        navigationIcon = {
-//            Icon(
-//                painter = painterResource(R.drawable.ic_back_arrow),
-//                contentDescription = null,
-//                tint = MaterialTheme.colorScheme.onBackground,
-//                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.medium_size))
-//            )
-//        },
-//        colors = TopAppBarDefaults.topAppBarColors(
-//            containerColor = MaterialTheme.colorScheme.background,
-//            titleContentColor = MaterialTheme.colorScheme.onBackground
-//        ),
-//        windowInsets = TopAppBarDefaults.windowInsets
-//    )
-//}
 
 private fun shareApp(context: Context){
     val linkToCourse = context.getString(R.string.course_link)
@@ -140,7 +78,7 @@ fun SettingsScreen(){
                 checked = isChecked,
                 onCheckedChange = {isChecked = it},
 
-            )
+                )
         }
 
         SettingsItem(
@@ -179,23 +117,5 @@ fun SettingsItem(text: String, iconRes: Int, onClick: () -> Unit){
             painter = painterResource(iconRes),
             contentDescription = null,
             tint = Color(0xFFAEAFB4))
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = false, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Composable
-fun SettingsPreview(){
-    PlaylistMakerComposeTheme {
-        Scaffold(topBar = {
-            MyTopBar(
-                headText = stringResource(R.string.settings),
-                onClick = {}
-            )
-        },
-            modifier = Modifier.fillMaxSize()) { innerPadding ->
-            Column(modifier = Modifier.padding(innerPadding)) {
-                SettingsScreen()
-            }
-        }
     }
 }
