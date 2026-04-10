@@ -71,7 +71,7 @@ fun SettingsScreen(){
 
             Text(
                 text = stringResource(R.string.night_theme),
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyMedium
             )
 
             Switch(
@@ -110,7 +110,7 @@ fun SettingsItem(text: String, iconRes: Int, onClick: () -> Unit){
 
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyMedium
         )
 
         Icon(
