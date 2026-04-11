@@ -1,5 +1,6 @@
 package com.example.playlistmakercompose.ui.screens
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,6 +18,7 @@ class SearchScreenViewModel : ViewModel() {
 
     var tracks by mutableStateOf<List<Track>>(listOf())
     var query by mutableStateOf("")
+    var lastFailedQuery by mutableStateOf("")
 
 
     fun updateText(text: String){
@@ -25,22 +27,27 @@ class SearchScreenViewModel : ViewModel() {
     fun clearText(){
         query = ""
     }
-    fun searchTracks(){
+
+    fun clearTracks(){
+        tracks = emptyList()
+    }
+
+    fun clearMessageVisibility(){
+        notFound = false
+        noInternet = false
+    }
+    fun searchTracks(query: String){
         viewModelScope.launch {
             try {
                 if (query.isNotEmpty()){
                     val response = iTunesService.search(query)
 
                     if (response.isSuccessful){
-//                        tracks.clear()
 
                         val result = response.body()?.results ?: emptyList()
 
                         tracks = result
 
-//                        if (response.body()?.results?.isNotEmpty() == true){
-//                            tracks.addAll(response.body()?.results!!)
-//                        }
                         checkResponse(response.code())
                     }
                     else{
@@ -63,14 +70,14 @@ class SearchScreenViewModel : ViewModel() {
                     tracks = emptyList()
                     notFound = true
                 } else {
-                    notFound = false
-                    noInternet = false
+                    clearMessageVisibility()
                 }
             }
 
             else -> {
                 tracks = emptyList()
                 noInternet = true
+                lastFailedQuery = query
             }
         }
     }
