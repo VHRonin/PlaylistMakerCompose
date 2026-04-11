@@ -123,7 +123,8 @@ fun SearchScreen(viewModel: SearchScreenViewModel){
             ErrorMessage(
                 if (!isSystemInDarkTheme()) R.drawable.ic_no_internet_light else R.drawable.ic_no_internet_dark,
                 stringResource(R.string.no_internet),
-                true
+                true,
+                onRefreshClick = {viewModel.searchTracks(viewModel.lastFailedQuery)}
             )
         }
         else if (notFound){
@@ -141,7 +142,13 @@ fun MyTextField(viewModel: SearchScreenViewModel){
     val focusManager = LocalFocusManager.current
     BasicTextField(
         value = textValue,
-        onValueChange = {viewModel.updateText(it)},
+        onValueChange = {
+            viewModel.updateText(it)
+            if (viewModel.query.isEmpty()){
+                viewModel.clearTracks()
+                viewModel.clearMessageVisibility()
+            }
+        },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -154,7 +161,7 @@ fun MyTextField(viewModel: SearchScreenViewModel){
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
 
-            viewModel.searchTracks()
+            viewModel.searchTracks(viewModel.query)
         }),
         decorationBox = {innerTextField ->
             Row(modifier = Modifier.fillMaxSize().padding(start = 12.dp),
@@ -184,6 +191,8 @@ fun MyTextField(viewModel: SearchScreenViewModel){
                     IconButton(onClick = {
                         viewModel.clearText()
                         focusManager.clearFocus()
+                        viewModel.clearTracks()
+                        viewModel.clearMessageVisibility()
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_clear),
@@ -208,11 +217,6 @@ fun TrackCard(track: Track){
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .padding(12.dp)) {
-//        Image(
-//            painter = painterResource(R.drawable.ic_support),
-//            contentDescription = null,
-//            modifier = Modifier.size(45.dp, 45.dp)
-//        )
         AsyncImage(
             modifier = Modifier.size(45.dp).clip(RoundedCornerShape(2.dp)),
             model = track.artworkUrl100,
@@ -286,7 +290,7 @@ fun ErrorMessage(iconRes: Int, problemText: String, showButton: Boolean = false,
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {onRefreshClick},
+                onClick = {onRefreshClick()},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.onBackground,
                     contentColor = MaterialTheme.colorScheme.onBackground
@@ -303,25 +307,13 @@ fun ErrorMessage(iconRes: Int, problemText: String, showButton: Boolean = false,
     }
 }
 
-//@Preview
-//@Composable
-//fun ErrorPreview(){
-//    PlaylistMakerComposeTheme {
-//        ErrorMessage(
-//            R.drawable.ic_no_internet_light,
-//            stringResource(R.string.no_internet),
-//                true
-//        )
-//    }
-//}
-
-private fun formatTime(trackTime: String?): String{
-    val millis = trackTime?.toLongOrNull() ?: return "--:--"
+private fun formatTime(trackTime: Long?): String{
+//    val millis = trackTime?.toLongOrNull() ?: return "--:--"
     return SimpleDateFormat(
         "mm:ss",
         Locale.getDefault()
     )
-        .format(millis)
+        .format(trackTime)
         .toString()
 }
 

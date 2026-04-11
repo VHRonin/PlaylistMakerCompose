@@ -29,10 +29,10 @@ fun AppNavHost(navController: NavHostController){
     NavHost(
         navController = navController,
         startDestination = Destination.Main.route,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None },
-        popEnterTransition = { EnterTransition.None },
-        popExitTransition = { ExitTransition.None }
+//        enterTransition = { EnterTransition.None },
+//        exitTransition = { ExitTransition.None },
+//        popEnterTransition = { EnterTransition.None },
+//        popExitTransition = { ExitTransition.None }
     ){
         composable(route = Destination.Main.route) {
             MainRoute(onNavigate = onNavigate)
