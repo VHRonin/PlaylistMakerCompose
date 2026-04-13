@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +27,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
+import androidx.navigation.NavController
 import com.example.playlistmakercompose.R
+import com.example.playlistmakercompose.ui.components.AppBottomNavigation
+import com.example.playlistmakercompose.ui.components.MyTopBar
 
 private fun shareApp(context: Context){
     val linkToCourse = context.getString(R.string.course_link)
@@ -54,6 +58,24 @@ private fun openUserAgreement(context: Context){
     agreementIntent.data = context.getString(R.string.agreement_link).toUri()
 
     context.startActivity(agreementIntent)
+}
+
+@Composable
+fun SettingsRoute(onBackClick: () -> Unit, navController: NavController){
+    Scaffold(topBar = {
+        MyTopBar(
+            headText = stringResource(R.string.settings),
+            onClick = {onBackClick()}
+        )
+    },
+        bottomBar = {
+            AppBottomNavigation(navController)
+        },
+        modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            SettingsScreen()
+        }
+    }
 }
 
 @Composable

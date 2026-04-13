@@ -31,15 +31,15 @@ fun MyTopBar(headText: String, onClick: () -> Unit){
             )
         },
         navigationIcon = {
-            IconButton(
-                onClick = onClick
-                ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_back_arrow),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground,
-                )
-            }
+//            IconButton(
+//                onClick = onClick
+//            ) {
+//                Icon(
+//                    painter = painterResource(R.drawable.ic_back_arrow),
+//                    contentDescription = null,
+//                    tint = MaterialTheme.colorScheme.onBackground,
+//                )
+//            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,

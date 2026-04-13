@@ -9,6 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.playlistmakercompose.data.Track
+import com.example.playlistmakercompose.ui.screens.LibraryRoute
+import com.example.playlistmakercompose.ui.screens.LibraryScreen
 import com.example.playlistmakercompose.ui.screens.MainRoute
 import com.example.playlistmakercompose.ui.screens.SearchRoute
 import com.example.playlistmakercompose.ui.screens.SettingsRoute
@@ -28,7 +30,7 @@ fun AppNavHost(navController: NavHostController){
 
     NavHost(
         navController = navController,
-        startDestination = Destination.Main.route,
+        startDestination = Destination.Search.route,
 //        enterTransition = { EnterTransition.None },
 //        exitTransition = { ExitTransition.None },
 //        popEnterTransition = { EnterTransition.None },
@@ -39,11 +41,15 @@ fun AppNavHost(navController: NavHostController){
         }
 
         composable(route = Destination.Settings.route) {
-            SettingsRoute(onBackClick = onBackClick)
+            SettingsRoute(onBackClick = onBackClick, navController)
         }
 
         composable(route = Destination.Search.route) {
-            SearchRoute(onBackClick = onBackClick)
+            SearchRoute(onBackClick = onBackClick, navController)
+        }
+
+        composable(route = Destination.Library.route) {
+            LibraryRoute(navController)
         }
     }
 }

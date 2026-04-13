@@ -56,11 +56,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.playlistmakercompose.R
 import com.example.playlistmakercompose.data.Track
 import com.example.playlistmakercompose.network.ITunesApi
+import com.example.playlistmakercompose.ui.components.AppBottomNavigation
 import com.example.playlistmakercompose.ui.components.MyTopBar
 import com.example.playlistmakercompose.ui.theme.PlaylistMakerComposeTheme
 import com.example.playlistmakercompose.ui.theme.YPColors
@@ -78,15 +81,19 @@ private val retrofit = Retrofit.Builder()
 
 val iTunesService = retrofit.create(ITunesApi::class.java)
 @Composable
-fun SearchRoute(onBackClick: () -> Unit){
+fun SearchRoute(onBackClick: () -> Unit, navController: NavController){
     val viewModel: SearchScreenViewModel = viewModel()
 
-    Scaffold(topBar = {
-        MyTopBar(
-            headText = stringResource(R.string.search),
-            onClick = {onBackClick()}
-        )
-    },
+    Scaffold(
+        topBar = {
+            MyTopBar(
+                headText = stringResource(R.string.search),
+                onClick = {onBackClick()}
+            )
+        },
+        bottomBar = {
+            AppBottomNavigation(navController)
+        },
         modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             SearchScreen(viewModel)
@@ -103,7 +110,7 @@ fun SearchScreen(viewModel: SearchScreenViewModel){
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                vertical = dimensionResource(R.dimen.small_size))
+                top = dimensionResource(R.dimen.small_size))
             .background(MaterialTheme.colorScheme.background)
     ) {
         Box(modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.normal_size))){
@@ -322,5 +329,5 @@ private fun formatTime(trackTime: Long?): String{
 @Preview(showBackground = true, showSystemUi = false, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun SearchPreview(){
-    SearchRoute(onBackClick = {})
+    SearchRoute(onBackClick = {}, rememberNavController())
 }
