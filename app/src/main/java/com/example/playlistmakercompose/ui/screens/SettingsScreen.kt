@@ -27,41 +27,15 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.playlistmakercompose.R
 import com.example.playlistmakercompose.ui.components.AppBottomNavigation
 import com.example.playlistmakercompose.ui.components.MyTopBar
 
-private fun shareApp(context: Context){
-    val linkToCourse = context.getString(R.string.course_link)
-
-    val shareIntent = Intent(Intent.ACTION_SEND)
-    shareIntent.type = context.getString(R.string.share_intent_type)
-    shareIntent.putExtra(Intent.EXTRA_TEXT, linkToCourse)
-
-    context.startActivity(shareIntent)
-}
-
-private fun textSupport(context: Context){
-    val supportIntent = Intent(Intent.ACTION_SENDTO)
-
-    supportIntent.data = context.getString(R.string.support_intent_data).toUri()
-    supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(context.getString(R.string.email)))
-    supportIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.mail_theme))
-    supportIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.mail_body))
-
-    context.startActivity(supportIntent)
-}
-
-private fun openUserAgreement(context: Context){
-    val agreementIntent = Intent(Intent.ACTION_VIEW)
-    agreementIntent.data = context.getString(R.string.agreement_link).toUri()
-
-    context.startActivity(agreementIntent)
-}
-
 @Composable
 fun SettingsRoute(onBackClick: () -> Unit, navController: NavController){
+    val viewModel: SettingsScreenViewModel = viewModel()
     Scaffold(topBar = {
         MyTopBar(
             headText = stringResource(R.string.settings),
@@ -73,15 +47,14 @@ fun SettingsRoute(onBackClick: () -> Unit, navController: NavController){
         },
         modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            SettingsScreen()
+            SettingsScreen(viewModel)
         }
     }
 }
 
 @Composable
-fun SettingsScreen(){
+fun SettingsScreen(viewModel: SettingsScreenViewModel){
     val context = LocalContext.current
-    var isChecked by remember { mutableStateOf(false)}
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -97,8 +70,8 @@ fun SettingsScreen(){
             )
 
             Switch(
-                checked = isChecked,
-                onCheckedChange = {isChecked = it},
+                checked = viewModel.isChecked,
+                onCheckedChange = {viewModel.toggleCheck(it)},
 
                 )
         }
@@ -106,17 +79,17 @@ fun SettingsScreen(){
         SettingsItem(
             text = stringResource(R.string.share_application),
             iconRes = R.drawable.ic_share,
-            onClick = {shareApp(context)})
+            onClick = {viewModel.shareApp(context)})
 
         SettingsItem(
             text = stringResource(R.string.support),
             iconRes = R.drawable.ic_support,
-            onClick = {textSupport(context)})
+            onClick = {viewModel.textSupport(context)})
 
         SettingsItem(
             text = stringResource(R.string.user_agreement),
             iconRes = R.drawable.ic_forward_arrow,
-            onClick = {openUserAgreement(context)})
+            onClick = {viewModel.openUserAgreement(context)})
     }
 }
 
