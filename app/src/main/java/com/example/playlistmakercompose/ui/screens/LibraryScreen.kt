@@ -14,21 +14,22 @@ import com.example.playlistmakercompose.ui.components.AppBottomNavigation
 import com.example.playlistmakercompose.ui.components.MyTopBar
 @Composable
 fun LibraryRoute(navController: NavController){
-    Scaffold(
-        topBar = {
-            MyTopBar(
-                headText = stringResource(R.string.media_library),
-                onClick = {navController.popBackStack()}
-            )
-        },
-        bottomBar = {
-            AppBottomNavigation(navController)
-        },
-        modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            LibraryScreen()
-        }
-    }
+    LibraryScreen()
+//    Scaffold(
+//        topBar = {
+//            MyTopBar(
+//                headText = stringResource(R.string.media_library),
+//                onClick = {navController.popBackStack()}
+//            )
+//        },
+//        bottomBar = {
+//            AppBottomNavigation(navController)
+//        },
+//        modifier = Modifier.fillMaxSize()) { innerPadding ->
+//        Column(modifier = Modifier.padding(innerPadding)) {
+//            LibraryScreen()
+//        }
+//    }
 }
 
 @Composable
