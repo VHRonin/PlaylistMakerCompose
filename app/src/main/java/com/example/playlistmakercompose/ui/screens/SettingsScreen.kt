@@ -36,20 +36,22 @@ import com.example.playlistmakercompose.ui.components.MyTopBar
 @Composable
 fun SettingsRoute(onBackClick: () -> Unit, navController: NavController){
     val viewModel: SettingsScreenViewModel = viewModel()
-    Scaffold(topBar = {
-        MyTopBar(
-            headText = stringResource(R.string.settings),
-            onClick = {onBackClick()}
-        )
-    },
-        bottomBar = {
-            AppBottomNavigation(navController)
-        },
-        modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            SettingsScreen(viewModel)
-        }
-    }
+
+    SettingsScreen(viewModel)
+//    Scaffold(topBar = {
+//        MyTopBar(
+//            headText = stringResource(R.string.settings),
+//            onClick = {onBackClick()}
+//        )
+//    },
+//        bottomBar = {
+//            AppBottomNavigation(navController)
+//        },
+//        modifier = Modifier.fillMaxSize()) { innerPadding ->
+//        Column(modifier = Modifier.padding(innerPadding)) {
+//            SettingsScreen(viewModel)
+//        }
+//    }
 }
 
 @Composable

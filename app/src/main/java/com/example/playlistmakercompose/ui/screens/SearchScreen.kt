@@ -84,21 +84,23 @@ val iTunesService = retrofit.create(ITunesApi::class.java)
 fun SearchRoute(onBackClick: () -> Unit, navController: NavController){
     val viewModel: SearchScreenViewModel = viewModel()
 
-    Scaffold(
-        topBar = {
-            MyTopBar(
-                headText = stringResource(R.string.search),
-                onClick = {onBackClick()}
-            )
-        },
-        bottomBar = {
-            AppBottomNavigation(navController)
-        },
-        modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            SearchScreen(viewModel)
-        }
-    }
+    SearchScreen(viewModel)
+
+//    Scaffold(
+//        topBar = {
+//            MyTopBar(
+//                headText = stringResource(R.string.search),
+//                onClick = {onBackClick()}
+//            )
+//        },
+//        bottomBar = {
+//            AppBottomNavigation(navController)
+//        },
+//        modifier = Modifier.fillMaxSize()) { innerPadding ->
+//        Column(modifier = Modifier.padding(innerPadding)) {
+//            SearchScreen(viewModel)
+//        }
+//    }
 }
 
 @Composable
