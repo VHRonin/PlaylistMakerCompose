@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.playlistmakercompose.R
@@ -40,13 +41,18 @@ import com.example.playlistmakercompose.ui.navigation.AppNavHost
 import com.example.playlistmakercompose.ui.navigation.Destination
 import com.example.playlistmakercompose.ui.theme.MainScreen
 import com.example.playlistmakercompose.ui.theme.PlaylistMakerComposeTheme
+import com.example.playlistmakercompose.ui.viewmodel.ThemeVIewModelFactory
+import com.example.playlistmakercompose.ui.viewmodel.ThemeViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            PlaylistMakerComposeTheme(dynamicColor = false){
+            val prefs = getSharedPreferences(ThemeViewModel.APP_PREFERENCES, MODE_PRIVATE)
+
+            val viewModel = viewModel<ThemeViewModel>(factory = ThemeVIewModelFactory(prefs))
+            PlaylistMakerComposeTheme(dynamicColor = false, darkTheme = viewModel.darkTheme){
 //                Scaffold(topBar = {
 //                    MainTopBar()
 //                }, containerColor = MaterialTheme.colorScheme.MainScreen, modifier = Modifier.fillMaxSize()) { innerPadding ->

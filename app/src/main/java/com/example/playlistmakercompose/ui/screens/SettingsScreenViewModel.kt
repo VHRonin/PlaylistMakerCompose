@@ -2,6 +2,7 @@ package com.example.playlistmakercompose.ui.screens
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -9,13 +10,18 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import com.example.playlistmakercompose.R
+import com.example.playlistmakercompose.ui.viewmodel.ThemeViewModel
+import androidx.core.content.edit
 
-class SettingsScreenViewModel : ViewModel() {
+class SettingsScreenViewModel(private val sharedPreferences: SharedPreferences) : ViewModel() {
     var isChecked by mutableStateOf(false)
         private set
 
     fun toggleCheck(check: Boolean){
         isChecked = check
+        sharedPreferences.edit {
+            putBoolean(ThemeViewModel.DARK_THEME_KEY, check)
+        }
     }
     fun shareApp(context: Context){
         val linkToCourse = context.getString(R.string.course_link)
@@ -43,5 +49,9 @@ class SettingsScreenViewModel : ViewModel() {
         agreementIntent.data = context.getString(R.string.agreement_link).toUri()
 
         context.startActivity(agreementIntent)
+    }
+
+    fun getTheme(){
+        isChecked = sharedPreferences.getBoolean(ThemeViewModel.APP_PREFERENCES, false)
     }
 }

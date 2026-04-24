@@ -2,6 +2,7 @@ package com.example.playlistmakercompose.ui.screens
 
 import android.content.Context
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,12 +32,19 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.playlistmakercompose.R
+import com.example.playlistmakercompose.data.SearchHistory
 import com.example.playlistmakercompose.ui.components.AppBottomNavigation
 import com.example.playlistmakercompose.ui.components.MyTopBar
+import com.example.playlistmakercompose.ui.viewmodel.SearchViewModelFactory
+import com.example.playlistmakercompose.ui.viewmodel.SettingsViewModelFactory
+import com.example.playlistmakercompose.ui.viewmodel.ThemeVIewModelFactory
+import com.example.playlistmakercompose.ui.viewmodel.ThemeViewModel
 
 @Composable
 fun SettingsRoute(onBackClick: () -> Unit, navController: NavController){
-    val viewModel: SettingsScreenViewModel = viewModel()
+    val context = LocalContext.current
+    val prefs = context.getSharedPreferences(ThemeViewModel.APP_PREFERENCES, Context.MODE_PRIVATE)
+    val viewModel: SettingsScreenViewModel = viewModel(factory = SettingsViewModelFactory(prefs))
 
     SettingsScreen(viewModel)
 //    Scaffold(topBar = {
@@ -58,6 +67,15 @@ fun SettingsRoute(onBackClick: () -> Unit, navController: NavController){
 fun SettingsScreen(viewModel: SettingsScreenViewModel){
     val context = LocalContext.current
 
+    val activity = context as ComponentActivity
+
+    val sharedPreferences = context.getSharedPreferences(ThemeViewModel.APP_PREFERENCES, Context.MODE_PRIVATE)
+
+    val themeViewModel = viewModel<ThemeViewModel>(
+        viewModelStoreOwner = activity,
+        factory = ThemeVIewModelFactory(sharedPreferences)
+    )
+
     Column(modifier = Modifier.fillMaxSize()) {
 
         // Spacer(modifier = Modifier.width(20.dp))
@@ -72,10 +90,13 @@ fun SettingsScreen(viewModel: SettingsScreenViewModel){
             )
 
             Switch(
-                checked = viewModel.isChecked,
-                onCheckedChange = {viewModel.toggleCheck(it)},
+                checked = themeViewModel.darkTheme,
+                onCheckedChange = {
+                    // viewModel.toggleCheck(it)
+                    themeViewModel.switchTheme(it)
+                },
 
-                )
+            )
         }
 
         SettingsItem(
