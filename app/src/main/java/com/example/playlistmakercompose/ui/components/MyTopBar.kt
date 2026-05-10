@@ -22,7 +22,7 @@ import com.example.playlistmakercompose.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopBar(headText: String, onClick: () -> Unit){
+fun MyTopBar(headText: String, onClick: () -> Unit, showBackButton: Boolean = false){
     TopAppBar(
         title = {
             Text(
@@ -31,15 +31,17 @@ fun MyTopBar(headText: String, onClick: () -> Unit){
             )
         },
         navigationIcon = {
-//            IconButton(
-//                onClick = onClick
-//            ) {
-//                Icon(
-//                    painter = painterResource(R.drawable.ic_back_arrow),
-//                    contentDescription = null,
-//                    tint = MaterialTheme.colorScheme.onBackground,
-//                )
-//            }
+            if (showBackButton){
+                IconButton(
+                    onClick = onClick
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_back_arrow),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onBackground,
+                    )
+                }
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
