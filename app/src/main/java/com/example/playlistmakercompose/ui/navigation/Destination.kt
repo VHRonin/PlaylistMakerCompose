@@ -9,11 +9,13 @@ sealed class Destination(val route: String, val iconId: Int, val label: String) 
     data object Settings : Destination(SETTINGS, R.drawable.ic_settings, "Настройки")
     data object Search : Destination(SEARCH, R.drawable.ic_search, "Поиск")
     data object Library : Destination(LIBRARY, R.drawable.ic_library, "Медиатека")
+    data object Player : Destination(PLAYER, 0, "")
 
     companion object{
         private const val MAIN = "main"
         private const val SETTINGS = "settings"
         private const val SEARCH = "search"
         private const val LIBRARY = "library"
+        private const val PLAYER = "player"
     }
 }
