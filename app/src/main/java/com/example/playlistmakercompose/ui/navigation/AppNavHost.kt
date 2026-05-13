@@ -22,6 +22,7 @@ import com.example.playlistmakercompose.ui.components.MyTopBar
 import com.example.playlistmakercompose.ui.screens.LibraryRoute
 import com.example.playlistmakercompose.ui.screens.LibraryScreen
 import com.example.playlistmakercompose.ui.screens.MainRoute
+import com.example.playlistmakercompose.ui.screens.PlayerScreen
 import com.example.playlistmakercompose.ui.screens.SearchRoute
 import com.example.playlistmakercompose.ui.screens.SearchScreen
 import com.example.playlistmakercompose.ui.screens.SettingsRoute
@@ -47,12 +48,17 @@ fun AppNavHost(navController: NavHostController){
 
     Scaffold(
         topBar = {
-            if (showBars){
-                MyTopBar(
-                    headText = currentDestination?.label ?: "",
-                    onClick = {}
-                )
-            }
+            MyTopBar(
+                headText = currentDestination?.label ?: "",
+                onClick = {
+                    if (showBars) {
+
+                    } else {
+                        navController.popBackStack()
+                    }
+                },
+                showBackButton = if (showBars) false else true
+            )
         },
         bottomBar = {
             if (showBars){
@@ -83,6 +89,10 @@ fun AppNavHost(navController: NavHostController){
 
                 composable(route = Destination.Library.route) {
                     LibraryRoute(navController)
+                }
+
+                composable(route = Destination.Player.route) {
+                    PlayerScreen(navController)
                 }
             }
         }

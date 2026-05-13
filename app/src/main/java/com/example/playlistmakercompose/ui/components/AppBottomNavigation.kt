@@ -99,7 +99,7 @@ fun NavigationPreview(){
         },
             modifier = Modifier.fillMaxSize()) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
-                SearchScreen(viewModel)
+                SearchScreen(viewModel, navController)
             }
         }
     }
