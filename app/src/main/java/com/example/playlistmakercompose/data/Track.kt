@@ -1,7 +1,11 @@
 package com.example.playlistmakercompose.data
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 
+
+@Parcelize
 data class Track(
     val trackName: String?,
     val artistName: String?,
@@ -12,7 +16,7 @@ data class Track(
     val releaseDate: String?,
     val primaryGenreName: String?,
     val country: String?
-){
+) : Parcelable{
 
     fun getCoverArtwork() = artworkUrl100?.replaceAfterLast('/',"512x512bb.jpg")
 }

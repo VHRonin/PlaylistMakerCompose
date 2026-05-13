@@ -71,6 +71,7 @@ import com.example.playlistmakercompose.data.Track
 import com.example.playlistmakercompose.network.ITunesApi
 import com.example.playlistmakercompose.ui.components.AppBottomNavigation
 import com.example.playlistmakercompose.ui.components.MyTopBar
+import com.example.playlistmakercompose.ui.navigation.Destination
 import com.example.playlistmakercompose.ui.theme.PlaylistMakerComposeTheme
 import com.example.playlistmakercompose.ui.theme.Typography
 import com.example.playlistmakercompose.ui.theme.YPColors
@@ -94,7 +95,7 @@ fun SearchRoute(onBackClick: () -> Unit, navController: NavController){
     val sharedPreferences = context.getSharedPreferences(SearchHistory.HISTORY_KEY, Context.MODE_PRIVATE)
     val viewModel: SearchScreenViewModel = viewModel(factory = SearchViewModelFactory(sharedPreferences))
 
-    SearchScreen(viewModel)
+    SearchScreen(viewModel, navController)
 
 //    Scaffold(
 //        topBar = {
@@ -114,7 +115,7 @@ fun SearchRoute(onBackClick: () -> Unit, navController: NavController){
 }
 
 @Composable
-fun SearchScreen(viewModel: SearchScreenViewModel){
+fun SearchScreen(viewModel: SearchScreenViewModel, navController: NavController){
     val tracks = viewModel.tracks
     val notFound = viewModel.notFound
     val noInternet = viewModel.noInternet
@@ -134,7 +135,7 @@ fun SearchScreen(viewModel: SearchScreenViewModel){
 
         LazyColumn {
             items(items = tracks, key = {it.trackId ?: "${it.trackName}${it.artistName}${it.hashCode()}"}){ track ->
-                TrackCard(track, viewModel)
+                TrackCard(track, viewModel, navController = navController)
             }
         }
 
@@ -161,7 +162,7 @@ fun SearchScreen(viewModel: SearchScreenViewModel){
 
         if (viewModel.searchHistory.tracks.isNotEmpty() && viewModel.isSearchFieldFocused && viewModel.query.isEmpty()){
 
-            TracksHistory(viewModel)
+            TracksHistory(viewModel, navController)
         }
     }
 }
@@ -240,7 +241,7 @@ fun MyTextField(viewModel: SearchScreenViewModel){
 }
 
 @Composable
-fun TrackCard(track: Track, viewModel: SearchScreenViewModel){
+fun TrackCard(track: Track, viewModel: SearchScreenViewModel, navController: NavController){
     val trackName = track.trackName ?: stringResource(R.string.unknown_track_name)
     val artistName = track.artistName ?: stringResource(R.string.unknown_artist_name)
     val trackTime = track.trackTime?.let { formatTime(it) } ?: "--:--"
@@ -249,7 +250,11 @@ fun TrackCard(track: Track, viewModel: SearchScreenViewModel){
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
-            .clickable{viewModel.searchHistory.addTrackToHistory(track)}
+            .clickable{
+                viewModel.searchHistory.addTrackToHistory(track)
+                navController.currentBackStackEntry?.savedStateHandle?.set("track", track)
+                navController.navigate(Destination.Player.route)
+            }
             .padding(12.dp)) {
         AsyncImage(
             modifier = Modifier.size(45.dp).clip(RoundedCornerShape(2.dp)),
@@ -267,7 +272,9 @@ fun TrackCard(track: Track, viewModel: SearchScreenViewModel){
         ) {
             Text(
                 text = trackName,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -325,21 +332,6 @@ fun ErrorMessage(iconRes: Int, problemText: String, showButton: Boolean = false,
 
         if (showButton){
             Spacer(modifier = Modifier.height(24.dp))
-
-//            Button(
-//                onClick = {onRefreshClick()},
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = MaterialTheme.colorScheme.onBackground,
-//                    contentColor = MaterialTheme.colorScheme.onBackground
-//                ),
-//                shape = RoundedCornerShape(54.dp)
-//            ) {
-//                Text(
-//                    text = stringResource(R.string.update),
-//                    style = MaterialTheme.typography.titleSmall,
-//                    color = MaterialTheme.colorScheme.background,
-//                )
-//            }
             RoundedButton(onRefreshClick, R.string.update)
         }
     }
@@ -364,7 +356,7 @@ fun RoundedButton(onClick: () -> Unit, textId: Int){
 }
 
 @Composable
-fun TracksHistory(viewModel: SearchScreenViewModel){
+fun TracksHistory(viewModel: SearchScreenViewModel, navController: NavController){
     val tracks = viewModel.searchHistory.tracks
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -379,7 +371,7 @@ fun TracksHistory(viewModel: SearchScreenViewModel){
 
         LazyColumn(modifier = Modifier.weight(1f, fill = false)) {
             items(tracks){track ->
-                TrackCard(track, viewModel)
+                TrackCard(track, viewModel, navController)
             }
         }
 
