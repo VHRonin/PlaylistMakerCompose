@@ -30,6 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.playlistmakercompose.R
@@ -46,6 +49,18 @@ fun PlayerRoute(){
 
 @Composable
 fun PlayerScreen(navController: NavController){
+
+    val viewModel: PlayerViewModel = viewModel(
+        factory = PlayerViewModelFactory()
+    )
+
+    LifecycleEventEffect(Lifecycle.Event.ON_PAUSE) {
+        viewModel.onPause()
+    }
+    LifecycleEventEffect(Lifecycle.Event.ON_DESTROY) {
+        viewModel.onDestroy()
+    }
+
     val track = navController.previousBackStackEntry?.savedStateHandle?.get<Track>("track")
     val scrollState = rememberScrollState()
     Column(
